@@ -344,6 +344,16 @@ class JobClientBase(ABC):
                     table_name,
                     self.capabilities.max_identifier_length,
                 )
+            if (
+                table.get("write_disposition") == "merge"
+                and (not has_column_with_prop(table, "primary_key"))
+                and (not has_column_with_prop(table, "merge_key"))
+            ):
+                logger.warning(
+                    f'Table "{table_name}" in schema "{self.schema.name}" has write disposition'
+                    ' "merge" but no primary key or merge keys specified. Loader will fall back to'
+                    ' "append" write disposition for this table.'
+                )
             if has_column_with_prop(table, "hard_delete"):
                 if len(get_columns_names_with_prop(table, "hard_delete")) > 1:
                     raise SchemaException(
