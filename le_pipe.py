@@ -1,4 +1,5 @@
 import dlt
+import yaml
 import pandas as pd
 from dlt.common.utils import uniq_id
 
@@ -10,10 +11,10 @@ DISASTERS_URL = (
 
 if __name__ == "__main__":
 
-    @dlt.destination(batch_size=100, loader_file_format="parquet")
+    @dlt.destination(batch_size=10, loader_file_format="puae-jsonl")
     def my_destination(items, table) -> None:
-        data_frame = pd.DataFrame.from_records(items)
-        data_frame.to_csv(f'./{table["name"]}_{uniq_id()}.csv', index = False)
+        with open(f'./output/{table["name"]}_{uniq_id()}.yaml', 'w') as yaml_file:
+            yaml.dump(items, yaml_file)
 
     @dlt.resource(table_name="natural_disasters")
     def resource():
