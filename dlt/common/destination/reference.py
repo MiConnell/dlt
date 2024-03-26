@@ -28,7 +28,7 @@ from dlt.common import logger
 from dlt.common.schema import Schema, TTableSchema, TSchemaTables
 from dlt.common.schema.exceptions import SchemaException
 from dlt.common.schema.utils import (
-    get_write_disposition,
+    ensure_write_disposition,
     get_table_format,
     get_columns_names_with_prop,
     has_column_with_prop,
@@ -305,6 +305,7 @@ class JobClientBase(ABC):
         pass
 
     def should_truncate_table_before_load(self, table: TTableSchema) -> bool:
+        table = self.prepare_load_table(table["name"])
         return table["write_disposition"] == "replace"
 
     def create_table_chain_completed_followup_jobs(
@@ -420,8 +421,7 @@ class JobClientBase(ABC):
             # make a copy of the schema so modifications do not affect the original document
             table = deepcopy(self.schema.tables[table_name])
             # add write disposition if not specified - in child tables
-            if "write_disposition" not in table:
-                table["write_disposition"] = get_write_disposition(self.schema.tables, table_name)
+            ensure_write_disposition(self.schema.tables, table)
             if "table_format" not in table:
                 table["table_format"] = get_table_format(self.schema.tables, table_name)
             return table

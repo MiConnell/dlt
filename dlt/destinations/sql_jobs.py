@@ -361,10 +361,12 @@ class SqlMergeJob(SqlBaseJob):
             )
         )
 
-        has_merge_keys = len(primary_keys) == 0 and len(merge_keys)
-        if not has_merge_keys:
-            raise DatabaseTransientException("Could not find primary or merge keys, aborting merge job.")
-
+        if not primary_keys and not merge_keys:
+            # NOTE: this should never happen, the loader should select append for each tables that does not have
+            # the required keys
+            raise DatabaseTransientException(
+                "Could not find primary or merge keys, aborting merge job."
+            )
 
         key_clauses = cls._gen_key_table_clauses(primary_keys, merge_keys)
 
