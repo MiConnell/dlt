@@ -50,7 +50,7 @@ Change the destination to `duckdb` if you do not have access to Weaviate cluster
 Learn more:
 
 - [Setup Weaviate destination - local or cluster](dlt-ecosystem/destinations/weaviate.md).
-- [Connect the transformers to the resources](/docs/website/docs/general-usage/resource)
+- [Connect the transformers to the resources](general-usage/resource.md)
 to load additional data or enrich it.
-- [Transform your data before loading](/docs/website/docs/general-usage/resource#customize-resources) and see some
- [examples of customizations like column renames and anonymization](/docs/website/docs/general-usage/customising-pipelines/renaming_columns).
+- [Transform your data before loading](general-usage/resource.md#customize-resources) and see some
+ [examples of customizations like column renames and anonymization](general-usage/customising-pipelines/renaming_columns.md).
